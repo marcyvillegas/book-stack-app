@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux'
+import { logIn } from '../../redux/actions/authActions';
 
-function LogIn() {
+function LogIn(props) {
 
     const [formData, setFormData] = useState({
         email: "",
@@ -22,6 +24,7 @@ function LogIn() {
     function handleSubmit(event) {
 
         event.preventDefault();
+        props.logIn(formData);
     }
 
     return (
@@ -34,6 +37,9 @@ function LogIn() {
                     <input type="email" name="email" placeholder='Email' onChange={handleChange} />
                     <input type="password" name="password" placeholder='Password' onChange={handleChange} />
                     <button>Log In</button>
+                    {
+                        props.authError && <p>Log in error</p>
+                    }
                 </form>
             </div>
 
@@ -41,4 +47,16 @@ function LogIn() {
     );
 }
 
-export default LogIn;
+const mapStateToProps = (state) => {
+    return {
+        authError: state.auth.authError
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logIn: (credentials) => dispatch(logIn(credentials))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LogIn)

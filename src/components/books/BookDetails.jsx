@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getBookReview } from '../../redux/actions/bookReviewActions';
 import { connect } from 'react-redux';
 import { compose } from "redux";
 import { firestoreConnect } from "react-redux-firebase";
@@ -19,7 +18,6 @@ function BookDetails(props) {
     <div>
       <h1>Book Review Details</h1>
       <>
-        <p>hi</p>
         <p>📙 {bookReviewDetailed.bookName}</p>
         <p>📝 {bookReviewDetailed.author}</p>
         <p>⭐ {bookReviewDetailed.review}</p>
