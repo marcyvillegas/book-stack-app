@@ -11,8 +11,8 @@ function BookReviewList(props) {
     <div style={{ marginRight: "3rem" }}>
 
       {props.bookReviews && props.bookReviews.map(item => (
-        <Link to={`/book-review/${item.id}`}>
-          <BookReviewSummary key={item.id} bookReviews={item} />
+        <Link to={`/book-review/${item.id}`} key={item.id}>
+          <BookReviewSummary bookReviews={item} />
         </Link>
       ))}
 

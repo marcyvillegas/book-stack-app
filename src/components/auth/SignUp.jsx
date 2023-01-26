@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { signUp } from '../../redux/actions/authActions';
 
-function SignUp() {
+function SignUp(props) {
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -25,6 +27,7 @@ function SignUp() {
     function handleSubmit(event) {
 
         event.preventDefault();
+        props.signUp(formData);
     }
 
     return (
@@ -46,4 +49,17 @@ function SignUp() {
     );
 }
 
-export default SignUp;
+const mapStateToProps = (state) => {
+    return {
+      auth: state.firebase.auth,
+      authError: state.auth.authError
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch)=> {
+    return {
+      signUp: (credentials) => dispatch(signUp(credentials))
+    }
+  }
+
+  export default connect(mapStateToProps, mapDispatchToProps)(SignUp)

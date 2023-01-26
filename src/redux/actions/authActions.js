@@ -3,6 +3,8 @@ import { LOGIN_FAILED } from "./actionTypes/authTypes";
 
 import { LOGOUT_SUCCESS } from "./actionTypes/authTypes";
 
+import { SIGNUP_SUCCESS } from "./actionTypes/authTypes";
+
 const logInSuccess = () => {
     return {
         type: LOGIN_SUCCESS
@@ -21,6 +23,12 @@ const logOutSuccess = () => {
     }
 }
 
+const signUpSuccess = () => {
+    return {
+        type: SIGNUP_SUCCESS
+    }
+}
+
 export const logIn = (credentials) => {
     return async (dispatch, getState, { getFirebase }) => {
 
@@ -35,7 +43,7 @@ export const logIn = (credentials) => {
 
             dispatch(logInSuccess());
 
-        } catch(error) {
+        } catch (error) {
             dispatch(logInFailed());
         }
     }
@@ -49,9 +57,33 @@ export const logOut = () => {
         try {
             await firebase.auth().signOut();
             dispatch(logOutSuccess());
-            console.log("logout")
-        } catch(error) {
+        } catch (error) {
             // dispatch error
+        }
+    }
+}
+
+export const signUp = (newUser) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        const firestore = firebase.firestore();
+
+        try {
+
+            const createdUser = await firebase.auth().createUserWithEmailAndPassword(
+                newUser.email,
+                newUser.password)
+
+            await firestore.collection('users').doc(createdUser.user.uid).set({
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                initials: newUser.firstName[0] + newUser.lastName[0]
+            });
+
+            dispatch(signUpSuccess());
+
+        } catch (error) {
+            console.log(error)
         }
     }
 }

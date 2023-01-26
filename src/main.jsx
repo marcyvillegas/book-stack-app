@@ -7,8 +7,11 @@ import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import rootReducer from './redux/reducers/rootReducer';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
-import { getFirebase, ReactReduxFirebaseProvider } from 'react-redux-firebase'
-import { createFirestoreInstance } from 'redux-firestore'
+import { getFirebase, ReactReduxFirebaseProvider } from 'react-redux-firebase';
+import { createFirestoreInstance, getFirestore } from 'redux-firestore';
+import { useSelector } from "react-redux";
+import { isLoaded } from "react-redux-firebase";
+
 
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
@@ -43,8 +46,8 @@ const rrfConfig = {
 }
 
 const store = createStore(rootReducer,
-  applyMiddleware(thunk.withExtraArgument({ getFirebase }))
-  );
+  applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore }))
+);
 
 const rrfProps = {
   firebase,
@@ -53,12 +56,25 @@ const rrfProps = {
   createFirestoreInstance
 }
 
+function AuthIsLoaded({ children }) {
+  const auth = useSelector(state => state.firebase.auth);
+  if (!isLoaded(auth))
+    return (
+      <div>
+        <p>Loading...</p>
+      </div>
+    );
+  return children;
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <ReactReduxFirebaseProvider {...rrfProps}>
         <BrowserRouter>
-          <App />
+          <AuthIsLoaded>
+            <App />
+          </AuthIsLoaded>
         </BrowserRouter>
       </ReactReduxFirebaseProvider>
     </Provider>

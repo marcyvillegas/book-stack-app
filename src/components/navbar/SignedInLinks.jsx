@@ -5,6 +5,8 @@ import { logOut } from '../../redux/actions/authActions';
 
 function SignedInLinks(props) {
 
+    const { profile } = props;
+
     return (
         <div style={{ display: "flex", padding: "0 2rem", alignItems: "center" }}>
             <p style={{ paddingRight: "1rem" }}>
@@ -19,7 +21,7 @@ function SignedInLinks(props) {
                 </a>
             </p>
 
-            <h2>MM</h2>
+            <h2>{profile.initials}</h2>
         </div>
     );
 }
