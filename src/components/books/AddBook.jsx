@@ -1,7 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { createBookReview } from '../../redux/actions/bookReviewActions';
+import { useNavigate } from "react-router-dom";
 
-function AddBook() {
+function AddBook(props) {
+
+    const { auth } = props;
+    const navigate = useNavigate();
+
+    useEffect(() => {
+
+        if (!auth.uid) return navigate('/signup')
+
+    }, [auth.uid]);
 
     const [formData, setFormData] = useState({
         bookName: "",
@@ -24,6 +35,7 @@ function AddBook() {
     function handleSubmit(event) {
 
         event.preventDefault();
+        props.createBookReview(formData);
     }
 
     return (
@@ -44,10 +56,16 @@ function AddBook() {
     );
 }
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     createBookReview: bookReview => dispatch(createBookReview(bookReview))
-//   }
-// }
-
-export default AddBook;
+const mapStateToProps = (state) => {
+    return {
+      auth: state.firebase.auth
+    }
+  }
+  
+  const mapDispatchToProps = dispatch => {
+    return {
+        createBookReview: (bookReview) => dispatch(createBookReview(bookReview))
+    }
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(AddBook)

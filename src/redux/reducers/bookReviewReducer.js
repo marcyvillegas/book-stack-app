@@ -1,19 +1,8 @@
 import { CREATE_BOOK_REVIEW } from "../actions/actionTypes/bookReviewTypes";
 
 const initialState = {
-    bookReviews: [
-        // {
-        //     id: 1,
-        //     bookName: "The Blah",
-        //     author: "sdfa",
-        //     review: "xD"
-        // },
-        // {
-        //     id: 2,
-        //     bookName: "Enderdsaf",
-        //     author: "Marcy",
-        //     review: "nie niceniceniceniecniceni"
-        // }
+    bookReview: [
+
     ]
 }
 
@@ -21,6 +10,7 @@ const bookReviewReducer = (state = initialState, action) => {
     
     switch (action.type) {
         case CREATE_BOOK_REVIEW:
+            console.log("Created book review")
             return state
     
         default:

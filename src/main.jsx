@@ -12,7 +12,6 @@ import { createFirestoreInstance, getFirestore } from 'redux-firestore';
 import { useSelector } from "react-redux";
 import { isLoaded } from "react-redux-firebase";
 
-
 // Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
 // import { getAnalytics } from "firebase/analytics";
@@ -57,13 +56,16 @@ const rrfProps = {
 }
 
 function AuthIsLoaded({ children }) {
+
   const auth = useSelector(state => state.firebase.auth);
+
   if (!isLoaded(auth))
     return (
       <div>
         <p>Loading...</p>
       </div>
     );
+
   return children;
 }
 
